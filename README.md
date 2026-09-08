@@ -66,7 +66,7 @@ graph TD
     subgraph Classification_Head ["Feature Fusion & Latent Embedding"]
         GF --> CONCAT["Concatenate (17,408)"]
         LF --> CONCAT
-        CONCAT --> DENSE["Dense (64 units, ReLU)<br/><b>64D Feature Representation (t-SNE Space)</b>"]
+        CONCAT --> DENSE["Dense (64 units, ReLU)<br/>64D Feature Representation (t-SNE Space)"]
         DENSE --> OUT["Dense (1 unit, Sigmoid)<br/>Planet Probability [0, 1]"]
     end
 
@@ -77,7 +77,7 @@ graph TD
         VERDICT -->|No| FP["False Positive"]
     end
 
-    style DENSE fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
-    style VERDICT fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    style PC fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style FP fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    style DENSE fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000000
+    style VERDICT fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000000
+    style PC fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000000
+    style FP fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000000
