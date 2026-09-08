@@ -35,3 +35,49 @@ The architecture, preprocessing methodology, and core concepts implemented in th
 
 *   **Shallue, C. J., & Vanderburg, A. (2018).** *Identifying Exoplanets with Deep Learning: A Five-planet Resonant Chain around Kepler-80 and an Eighth Planet around Kepler-90.* The Astronomical Journal, 155(2), 94.  
     **ADS Bibliographic Link:** [NASA ADS Abstract (2018AJ....155...94S)](https://ui.adsabs.harvard.edu/abs/2018AJ....155...94S/abstract)
+
+
+## Workflow & Architecture
+
+```mermaid
+graph TD
+    subgraph Data_Input ["Data Preparation & Inputs"]
+        RAW["Kepler Light Curves (Folded & Binned)"]
+        GV["Global View (2001, 1)<br/>Full Orbital Timeline"]
+        LV["Local View (201, 1)<br/>Zoomed-in Transit Dip"]
+        RAW --> GV
+        RAW --> LV
+    end
+
+    subgraph Feature_Extraction ["Dual-Branch Feature Extraction (1D CNN)"]
+        GV --> GC1["Conv1D (16 filters, size 5) + ReLU"]
+        GC1 --> GP1["MaxPooling1D (pool 2, stride 2)"]
+        GP1 --> GC2["Conv1D (32 filters, size 5) + ReLU"]
+        GC2 --> GP2["MaxPooling1D (pool 2, stride 2)"]
+        GP2 --> GF["Flatten (15,904)"]
+
+        LV --> LC1["Conv1D (16 filters, size 5) + ReLU"]
+        LC1 --> LP1["MaxPooling1D (pool 2, stride 2)"]
+        LP1 --> LC2["Conv1D (32 filters, size 5) + ReLU"]
+        LC2 --> LP2["MaxPooling1D (pool 2, stride 2)"]
+        LP2 --> LF["Flatten (1,504)"]
+    end
+
+    subgraph Classification_Head ["Feature Fusion & Latent Embedding"]
+        GF --> CONCAT["Concatenate (17,408)"]
+        LF --> CONCAT
+        CONCAT --> DENSE["Dense (64 units, ReLU)<br/><b>64D Feature Representation (t-SNE Space)</b>"]
+        DENSE --> OUT["Dense (1 unit, Sigmoid)<br/>Planet Probability [0, 1]"]
+    end
+
+    subgraph Ensemble_Decision ["Ensemble Inference (10 Models)"]
+        OUT -.-> ENS["10 Models with Random Initial Weights<br/>Soft Voting (Mean Probability)"]
+        ENS --> VERDICT{"Threshold ≥ 0.5"}
+        VERDICT -->|Yes| PC["Planet Candidate"]
+        VERDICT -->|No| FP["False Positive"]
+    end
+
+    style DENSE fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    style VERDICT fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style PC fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style FP fill:#ffebee,stroke:#d32f2f,stroke-width:2px
