@@ -20,12 +20,11 @@ The model relies on a dual-branch, 11-layer Convolutional Neural Network designe
 The replicated ensemble achieved highly robust performance metrics:
 
 1.  **Standard Accuracy:** Achieved **~93.96%** accuracy on standard test data.
-2.  **Invariance Testing (Flipped Data):** To verify that the network learned the actual physics of a transit rather than memorizing spatial pixel indices (shortcut learning), the testing data arrays were physically reversed chronologically `[::-1]`. 
+2.  **Invariance Testing (Flipped Data):** To verify that the network learned the actual physics of a transit rather than memorizing spatial pixel indices (shortcut learning), the testing data arrays were physically reversed chronologically. 
     *   The model maintained a **~93.84%** accuracy on this physically inverted dataset, successfully proving **translational invariance**.
 3.  **Dimensionality Reduction:** The internal 64-dimensional representations of the final Dense layer were visualized using a **t-SNE (t-Distributed Stochastic Neighbor Embedding)** algorithm. The resulting 2D scatter plot showed clear, tight clusters of true planets separating cleanly from scattered false positives, providing visual proof of the model's underlying geometric logic.
 
 ## Future Implementation Goals
-*   Integration with the SETI Group IITT codebase.
 *   Implementation of K-Fold Cross-Validation for enhanced statistical rigor during production deployment.
 *   Application of the model to new datasets to identify unclassified candidates.
 
@@ -34,4 +33,5 @@ The replicated ensemble achieved highly robust performance metrics:
 ### Acknowledgements & Credits
 The architecture, preprocessing methodology, and core concepts implemented in this project are based directly on the foundational research published by:
 
-**Shallue, C. J., & Vanderburg, A. (2018).** *Identifying Exoplanets with Deep Learning: A Five-planet Resonant Chain around Kepler-80 and an Eighth Planet around Kepler-90.* The Astronomical Journal, 155(2), 94. 
+*   **Shallue, C. J., & Vanderburg, A. (2018).** *Identifying Exoplanets with Deep Learning: A Five-planet Resonant Chain around Kepler-80 and an Eighth Planet around Kepler-90.* The Astronomical Journal, 155(2), 94.  
+    **ADS Bibliographic Link:** [NASA ADS Abstract (2018AJ....155...94S)](https://ui.adsabs.harvard.edu/abs/2018AJ....155...94S/abstract)
